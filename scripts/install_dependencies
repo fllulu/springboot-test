@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+set -e
+
+CATALINA_HOME=/usr/share/tomcat8
+
+# Tar file name
+TOMCAT8_CORE_TAR_FILENAME='apache-tomcat-8.5.72.tar.gz'
+# Download URL for Tomcat8 core
+TOMCAT8_CORE_DOWNLOAD_URL="http://mirror.olnevhost.net/pub/apache/tomcat/tomcat-8/v8.5.72/bin/$TOMCAT8_CORE_TAR_FILENAME"
+# The top-level directory after unpacking the tar file
+TOMCAT8_CORE_UNPACKED_DIRNAME='apache-tomcat-8.5.72'
+
+
+# Check whether there exists a valid instance
+# of Tomcat8 installed at the specified directory
+[[ -d $CATALINA_HOME ]] && { service tomcat8 status; } && {
+    echo "Tomcat8 is already installed at $CATALINA_HOME. Skip reinstalling it."
+    exit 0
+}
+
+# Clear install directory
+if [ -d $CATALINA_HOME ]; then
+    rm -rf $CATALINA_HOME
+fi
+mkdir -p $CATALINA_HOME
+
+# Download the latest Tomcat8 version
+cd /tmp
+ { which wget; } || { yum install wget; }
+wget $TOMCAT8_CORE_DOWNLOAD_URL
+if [[ -d /tmp/$TOMCAT8_CORE_UNPACKED_DIRNAME ]]; then
+    rm -rf /tmp/$TOMCAT8_CORE_UNPACKED_DIRNAME
+fi
+tar xzf $TOMCAT8_CORE_TAR_FILENAME
+
+# Copy over to the CATALINA_HOME
+cp -r /tmp/$TOMCAT8_CORE_UNPACKED_DIRNAME/* $CATALINA_HOME
+#{ which tomcat8; } || { yum -y install tomcat8; }
+
+# Install Java if not yet installed
+{ which java; } || { yum -y install java; }
+
+# Create the service init.d script
+cat > /etc/init.d/tomcat8 <<'EOF'
+#!/bin/bash
+# chkconfig: 2345 10 90
+# description: Tomcat8 Start Stop Restart
+# processname: tomcat8
+PATH=$JAVA_HOME/bin:$PATH
+export PATH
+CATALINA_HOME='/usr/share/tomcat8'
+
+case $1 in
+start)
+sh $CATALINA_HOME/bin/startup.sh
+;;
+stop)
+sh $CATALINA_HOME/bin/shutdown.sh
+;;
+restart)
+sh $CATALINA_HOME/bin/shutdown.sh
+sh $CATALINA_HOME/bin/startup.sh
+;;
+esac
+exit 0
+EOF
+
+# Change permission mode for the service script
+chmod a+x /etc/init.d/tomcat8
+chmod 777 /etc/init.d/tomcat8
+chkconfig --add tomcat8
