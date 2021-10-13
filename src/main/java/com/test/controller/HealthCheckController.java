@@ -20,4 +20,9 @@ public class HealthCheckController {
     public HttpResponse<Boolean> isalive() {
         return HttpResponse.success(true);
     }
+
+    @GetMapping("/test")
+    public HttpResponse<Boolean> test() {
+        return HttpResponse.success(true);
+    }
 }
