@@ -21,4 +21,8 @@ public class HealthCheckController {
         return HttpResponse.success(true);
     }
 
+    @GetMapping("/test")
+    public HttpResponse<Boolean> test() {
+        return HttpResponse.success(true);
+    }
 }
