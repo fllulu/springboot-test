@@ -28,8 +28,15 @@ if [[ -d $CATALINA_HOME/webapps/$CONTEXT_PATH ]]; then
 fi
 
 # Copy the WAR file to the webapps directory
-rm -rf $WAR_STAGED_LOCATION
-rm -rf $HTTP_PORT_CONFIG_XSL_LOCATION
+#rm -rf $WAR_STAGED_LOCATION
+if [[ -d WAR_STAGED_LOCATION ]]; then
+    rm -rf $WAR_STAGED_LOCATION
+fi
+#rm -rf $HTTP_PORT_CONFIG_XSL_LOCATION
+if [[ -d $HTTP_PORT_CONFIG_XSL_LOCATION ]]; then
+    rm -rf $HTTP_PORT_CONFIG_XSL_LOCATION
+fi
+
 cp $WAR_STAGED_LOCATION $CATALINA_HOME/webapps/$CONTEXT_PATH.war
 
 # Configure the Tomcat server HTTP connector
