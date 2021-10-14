@@ -21,7 +21,7 @@ public class HealthCheckController {
         return HttpResponse.success(true);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/mytest")
     public HttpResponse<Boolean> test() {
         return HttpResponse.success(true);
     }
