@@ -15,6 +15,7 @@ public class HealthCheckController {
     public HttpResponse<Boolean> healthcheck() {
         return HttpResponse.success(true);
     }
+
     
     @GetMapping("/isalive")
     public HttpResponse<Boolean> isalive() {
@@ -23,6 +24,11 @@ public class HealthCheckController {
 
     @GetMapping("/mytest")
     public HttpResponse<Boolean> test() {
+        return HttpResponse.success(true);
+    }
+
+    @GetMapping("/tests")
+    public HttpResponse<Boolean> tests() {
         return HttpResponse.success(true);
     }
 }
