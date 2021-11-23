@@ -2,25 +2,11 @@ package com.test.controller;
 
 import com.test.model.base.out.HttpResponse;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ * @author fenglu
  */
-@RestController
-public class HealthCheckController {
-
-
-    @GetMapping("/healthcheck")
-    public HttpResponse<Boolean> healthcheck() {
-        return HttpResponse.success(true);
-    }
-
-    
-    @GetMapping("/isalive")
-    public HttpResponse<Boolean> isalive() {
-        return HttpResponse.success(true);
-    }
+public class TestController {
 
     @GetMapping("/mytest")
     public HttpResponse<Boolean> test() {
